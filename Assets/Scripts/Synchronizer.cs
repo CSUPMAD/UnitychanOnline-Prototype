@@ -52,7 +52,7 @@ public class Synchronizer : Photon.MonoBehaviour {
 		if(!photonView.isMine){
 			transform.position = Vector3.Lerp(transform.position, receivePosition, Time.deltaTime * 10);
 			transform.rotation = Quaternion.Lerp(transform.rotation, receiveRotation, Time.deltaTime * 10);
-			rigidbody.velocity = Vector3.Lerp(rigidbody2D.velocity, receiveVelocity, Time.deltaTime * 10);
+			rigidbody.velocity = Vector3.Lerp(rigidbody.velocity, receiveVelocity, Time.deltaTime * 10);
 		}
 	}
 
