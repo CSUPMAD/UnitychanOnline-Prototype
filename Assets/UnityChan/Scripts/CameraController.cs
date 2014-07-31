@@ -48,7 +48,8 @@ namespace CameraController
 		void Start ()
 		{
 			if (this.focusObj == null)
-				this.setupFocusObject("CameraFocusObject");
+				this.setupFocusObject("CameraController");
+				//this.setupFocusObject("CameraFocusObject");
 
 			Transform trans = this.transform;
 			transform.parent = this.focusObj.transform;

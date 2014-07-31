@@ -49,6 +49,9 @@ public class UnityChanControlScriptWithRgidBody : Photon.MonoBehaviour
 	static int jumpState = Animator.StringToHash("Base Layer.Jump");
 	static int restState = Animator.StringToHash("Base Layer.Rest");
 
+	Vector3 targetPosition = Vector3.zero;
+	Vector3 interTargetPosition = Vector3.zero;
+
 // 初期化
 	void Start ()
 	{
@@ -71,6 +74,7 @@ public class UnityChanControlScriptWithRgidBody : Photon.MonoBehaviour
 				if (photonView.isMine) {
 						float h = Input.GetAxis ("Horizontal");				// 入力デバイスの水平軸をhで定義
 						float v = Input.GetAxis ("Vertical");				// 入力デバイスの垂直軸をvで定義
+
 						anim.SetFloat ("Speed", v);							// Animator側で設定している"Speed"パラメタにvを渡す
 						anim.SetFloat ("Direction", h); 						// Animator側で設定している"Direction"パラメタにhを渡す
 						anim.speed = animSpeed;								// Animatorのモーション再生速度に animSpeedを設定する
