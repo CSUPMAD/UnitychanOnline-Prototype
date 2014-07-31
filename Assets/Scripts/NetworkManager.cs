@@ -25,7 +25,8 @@ public class NetworkManager : Photon.MonoBehaviour {
 	void OnJoinedRoom() {
 		Debug.Log("Room参加成功！");
 		//プレイヤーをインスタンス化
-		Vector3 spawnPosition = new Vector3 (Random.Range (-2, 2), 5, 0); //生成位置
+		//Vector3 spawnPosition = new Vector3 (Random.Range (-2, 2), 5, 0); //生成位置
+		Vector3 spawnPosition = new Vector3 (0, 0, 0); //生成位置
 		var player = PhotonNetwork.Instantiate ("unitychanPrefab", spawnPosition, Quaternion.identity, 0);
 		//player.GetComponent<myThirdPersonController>().isControllable = true;
 		player.GetComponent<ThirdPersonController>().isControllable = true;

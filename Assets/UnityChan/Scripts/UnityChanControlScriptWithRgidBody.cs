@@ -49,6 +49,13 @@ public class UnityChanControlScriptWithRgidBody : Photon.MonoBehaviour
 	static int jumpState = Animator.StringToHash("Base Layer.Jump");
 	static int restState = Animator.StringToHash("Base Layer.Rest");
 
+	Vector3 startPosition = Vector3.zero;
+	Vector3 targetPosition = Vector3.zero;
+	Vector3 interTargetPosition = Vector3.zero;
+	Plane plane;
+	float distance = 0.0f;
+	bool keymode = true;
+
 // 初期化
 	void Start ()
 	{
@@ -62,15 +69,59 @@ public class UnityChanControlScriptWithRgidBody : Photon.MonoBehaviour
 		// CapsuleColliderコンポーネントのHeight、Centerの初期値を保存する
 		orgColHight = col.height;
 		orgVectColCenter = col.center;
-}
+
+		plane = new Plane(Vector3.up, Vector3.zero);
+	}
 	
 	
 // 以下、メイン処理.リジッドボディと絡めるので、FixedUpdate内で処理を行う.
 	void FixedUpdate ()
 	{
 				if (photonView.isMine) {
+					if(Input.GetAxis ("Horizontal")!=0 || Input.GetAxis ("Vertical")!= 0)
+					{
+						distance=0.0f;
+						keymode=true;
+						//targetPosition=transform.position;
+					}
 						float h = Input.GetAxis ("Horizontal");				// 入力デバイスの水平軸をhで定義
 						float v = Input.GetAxis ("Vertical");				// 入力デバイスの垂直軸をvで定義
+
+			if (Input.GetMouseButtonDown(0))
+			{
+				
+				Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+				//RaycastHit hit;
+				float hit = 0.0f;
+				if(plane.Raycast(ray, out hit)){
+					//if( hit.collider.gameObject != gameObject ) return;
+					
+					//targetObject = hit.collider.gameObject;
+					
+					Debug.Log (ray.GetPoint(hit));
+					transform.LookAt(ray.GetPoint(hit));
+					startPosition = transform.position;
+					targetPosition = ray.GetPoint(hit);
+					distance = Vector3.Distance(transform.position,targetPosition);
+					keymode=false;
+				}
+			}
+
+			float vc = (float)(Mathf.Sqrt ( (transform.position.x-targetPosition.x)*(transform.position.x-targetPosition.x)
+			                               +(transform.position.z-targetPosition.z)*(transform.position.z-targetPosition.z)));
+			float vcd = (float) Mathf.Sqrt((startPosition.x-transform.position.x)*(startPosition.x-transform.position.x)
+			                         +(startPosition.z-transform.position.z)*(startPosition.z-transform.position.z));
+			if(vcd<1.0f) vc = vcd*vcd+0.4f ;
+			//Debug.Log (vc);
+			vc *= vc;
+					if(vc>1.0f) vc=1.0f;
+					if(vc>50.0f) vc=0.0f;
+					if(vc<-1.0f) vc=0.0f;
+					if(vc<0.05f) vc=0.0f;
+					if(keymode) vc=0.0f;
+					v+=vc;
+			//Debug.Log (vc);
+
 						anim.SetFloat ("Speed", v);							// Animator側で設定している"Speed"パラメタにvを渡す
 						anim.SetFloat ("Direction", h); 						// Animator側で設定している"Direction"パラメタにhを渡す
 						anim.speed = animSpeed;								// Animatorのモーション再生速度に animSpeedを設定する

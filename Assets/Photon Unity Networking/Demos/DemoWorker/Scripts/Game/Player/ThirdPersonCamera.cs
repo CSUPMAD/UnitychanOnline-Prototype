@@ -236,5 +236,4 @@ public class ThirdPersonCamera : MonoBehaviour
     {
         return centerOffset;
     }
-
 }
